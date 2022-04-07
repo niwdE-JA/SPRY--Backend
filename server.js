@@ -2,14 +2,14 @@ const express = require('express') ;
 const bodyParser = require('body-parser') ;
 
 const app = express()
-app.use( bodyParser() )
+// app.use( bodyParser() )
 
 var getindex =0
 var postindex =0
 
 
 app.get('/', (req, res)=>{
-    i++
+    getindex++
     console.log(`Recieved [${getindex}] 'get' request(s) at localhost...`)
     // console.log(req)
     console.log(res.req.query)
