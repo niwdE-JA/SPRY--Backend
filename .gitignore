@@ -3,4 +3,5 @@ node_modules/
 node_modules
 #ignores all unnecessary files 
 /updata.js
+/server.js
 /package-lock.json
