@@ -4,14 +4,17 @@
   "description": "server practice",
   "main": "server.js",
   "scripts": {
-    "test": "node updata.js server.js",
     "start": "node server.js"
   },
   "author": "A.J, Edwin",
   "license": "ISC",
   "dependencies": {
+    "connect-session-knex": "^2.1.1",
     "express": "^4.17.3",
+    "express-session": "^1.17.2",
+    "express-validator": "^6.14.0",
     "knex": "^1.0.4",
-    "pg": "^8.7.3"
+    "pg": "^8.7.3",
+    "uuid": "^8.3.2"
   }
 }
