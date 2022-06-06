@@ -13,35 +13,35 @@ const knex = require('knex')({
 const answerHandler = (req, res)=>{
     console.log("Recieved '/answer/' 'post' request at localhost...");
     console.log(req.params);
-    //let {user_id, question_id}= req.params;
-    // res.status('201').send(req.params);
 
     //get form input params from body
-    let {email, alias, message, added_date} = req.body;
+    let {email, alias, message, date} = req.body;
 
-    answer( email, alias, message, added_date, res );
+    answer( email, alias, message, date, res );
 
 }
 
-const answer = ( email, alias, message, added_date, res )=>{
+const answer = ( email, alias, message, date, res )=>{
     //
     let raw = {
         alias: alias,
         message: message,
-        added: added_date,
+        added: date,
         email: email,
     };
+
+    console.log(raw); //testing
 
     // add to comment database
     knex.insert(raw)
         .into('comments')
         .then((fii)=>{
             console.log("Comment added successfully!");
-            res.status('201').send("Comment added successfully!");
+            res.status('201').json({status: 201, content: "Comment added successfully!"} );
         })
         .catch((err)=>{
             console.log("Error adding comment : " + err);
-            res.status('201').send("Error adding comment : " + err);
+            res.status('201').json({status: 401, content: "Error adding comment : " + err} );
         });
 
 }

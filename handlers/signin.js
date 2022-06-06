@@ -26,12 +26,11 @@ const signinHandler = (req, res)=>{
     console.log(req.body);
 
     //get form input params from body
-    let {email, password} = req.query;//testing only!!!
-    // let {email, password} = req.body;
+    let {email, password} = req.body;
 
     //signin using obtained values, idealy after sanitization
     signin(email, password, req, res);
-    // res.status('201').send("signin success!");
+    // res.status('201').json({status: 201, content: "signin success!"} );
     // console.log(req);
 }
 
@@ -55,12 +54,12 @@ const signin = (email, password, req, res)=>{
             password != output_array[0].password/*compare hash*/
             ){           
             console.log("Signin failed: Invalid email or password");
-            res.status('401').send("Signin failed: Invalid email or password");
+            res.status('401').json({status: 401, content: "Signin failed: Invalid email or password"} );
         }else{//success
             console.log("signin success!");
             
             createSession( email, req);
-            res.status('201').send("signin success!");
+            res.status('201').json({status: 201, content: "signin success!", user: email } );
         }
     })
     .catch((err)=>{
@@ -69,7 +68,7 @@ const signin = (email, password, req, res)=>{
     //generate session token and add to 'sessions' database
     //
     //(This 'sessions database' would be used to authenticate all future actions)
-    //send response containing session token
+    //json response containing session token
 }
 
 const createSession = (email, req)=>{

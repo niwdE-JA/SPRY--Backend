@@ -26,10 +26,13 @@ const getData = (user_id, res )=>{
     .then((output_array)=>{
         if (output_array.length == 0 /*User has no comments*/){           
             console.log("User has no comments");
-            res.status('401').send("User has no comments");
+            res.status('201').json({status: 204, content: "User has no comments"} );
         }else{
             console.log("Loaded comments successfully!");
-            res.status('201').send(output_array);
+            // consider unescaping here
+            console.log(output_array);
+            
+            res.status('201').json({status: 201, content: output_array} );
         }
     })
     .catch((err)=>{

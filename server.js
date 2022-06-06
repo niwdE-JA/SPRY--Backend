@@ -4,7 +4,6 @@ const {signinHandler} = require('./handlers/signin');
 const {registerHandler} = require('./handlers/register');
 const {getHome, getCoffee } = require('./handlers/get');
 const {answerHandler} = require('./handlers/answer');
-// 
 const {session_secret} = require('./config');
 const {check, validationResult} = require('express-validator');
 
@@ -42,19 +41,14 @@ const app = express();
 app.use( bodyParser.json() );
 app.use( sessions_config );
 
+app.use( (req, res, next)=>{
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000' );
+    res.setHeader('Access-Control-Allow-Credentials', 'true' );
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type' );
+    next();
+} );
 
-// POST-- '/signin' -- signin handler (with auth).
-// GET-- '/logout' -- logout
-// POST-- '/register' -- register handler.
-// POST-- '/answer/:user_id/:question_id -- post an answer.
-// GET-- '/home/:user_id' -- get home for given user, if authenticated, else redirect to login.  
-// GET-- '/about' -- gets any new info to be displayed.
-// DELETE-- '/home/:user_id' -- get home for given user
-// app.get('/keep-alive', (req, res)=>{
-    //this MUST be sent periodically by frontend to keep session cookie alive
-    //
-//     res.send(req.sessionID);
-// });
+
 
 const authZero = (req, res, next)=>{
     if ( req.session && req.params.user_id == req.session.user){
@@ -63,29 +57,30 @@ const authZero = (req, res, next)=>{
     }else{
         //invalid session
         //GOTO login
-        res.status('401').send('Invalid session');
+        console.log({content: 'Invalid session'});
+        res.status('401').json({status: 401, content: 'Invalid session'});
     }
 
 }
 
 const signin_check = [
-    check('email').isEmail().withMessage('Invalid Email').trim().escape(),
+    check('email').isEmail().withMessage('Invalid Email').trim(),
     check('password').isLength({min:8, max: 20}).withMessage('Invalid Password: Must be between 8 and 20 chracters').trim(),
 ];
 const register_check = [
-    check('email').isEmail().withMessage('Invalid Email').trim().escape(),
+    check('email').isEmail().withMessage('Invalid Email').trim(),
     check('password').isLength({min:8, max: 20}).withMessage('Invalid Password: Must be between 8 and 20 chracters').trim(),//escape tooo
-    check('firstname').isLength({min:1}).withMessage('Name too short').isLength({max:20}).withMessage('Name too long.').trim().escape(),
-    check('lastname').isLength({min:1}).withMessage('Name too short').isLength({max:20}).withMessage('Name too long.').trim().escape()
+    check('firstname').isLength({min:1}).withMessage('Name too short').isLength({max:20}).withMessage('Name too long.').trim(),
+    check('lastname').isLength({min:1}).withMessage('Name too short').isLength({max:20}).withMessage('Name too long.').trim()
 ];
 const home_check = [
-    check('user_id').isEmail().withMessage("Invalid User! 'User_id' must be Email").trim().escape(),
+    check('user_id').isEmail().withMessage("Invalid User! 'User_id' must be Email").trim(),
 ];
 const answer_check = [
-    check('email').isEmail().withMessage("Invalid Email").trim().escape(),
-    check('alias').isLength({min:1}).withMessage('Name too short').isLength({max:20}).withMessage('Name too long.').trim().escape(),
-    check('message').isLength({min:1}).withMessage('Name too short').isLength({max:500}).withMessage('Name too long.').escape(),
-    check('date').isDate().withMessage('Name too short'),
+    check('email').isEmail().withMessage("Invalid Email").trim(),
+    check('alias').isLength({min:1}).withMessage('Name too short').isLength({max:20}).withMessage('Name too long.').trim(),
+    check('message').isLength({min:1}).withMessage('Name too short').isLength({max:500}).withMessage('Name too long.'),
+    // check('date').isDate().withMessage('Invalid date'),
 ];
 
 
@@ -97,18 +92,24 @@ const isValid = (req, res, next)=>{
         console.log('Input verified');
         next();
     }else{
-        res.status('401').json({errors: errors.array() } );
+        // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000' );
+        res.status('401').json({status: 401, errors: errors.array() } );
+        
+        console.log('Validation error!');
+        console.log({errors: errors.array() } );
     }
 }
 
-app.post('/signin', signinHandler);
-app.get(
+
+
+app.post(
     '/signin',
     signin_check,
     isValid,
     signinHandler
-);//testing only!!
-  
+);
+
+
 app.post('/register',
     register_check,
     isValid,
@@ -121,6 +122,7 @@ app.post('/answer',
     answerHandler
 );
 
+
 app.get('/home/:user_id',
     home_check,
     isValid,
@@ -129,9 +131,12 @@ app.get('/home/:user_id',
 );
 
 
+
+
 app.get('/logout', (req, res)=>{
     req.session.destroy();
-    res.send("Logged out successfully.");
+    console.log({content: "Logged out successfully."} );
+    res.json({content: "Logged out successfully."} );
 });
 
 

@@ -25,13 +25,12 @@ const registerHandler = (req, res)=>{
     console.log(req.body);
 
     //get form input params from body
-    // let {firstname, lastname, email, password} = req.body;
-    let {firstname, lastname, email, password} = req.query;// testing only!!!
+    let {firstname, lastname, email, password} = req.body;
 
     //register using obtained values, idealy after sanitization
     register(firstname, lastname, email, password, res);
 
-    // res.status('201').send("success!");
+    // res.status('201').json({status: 201, content: "success!"} );
     // console.log(req);
 }
 
@@ -58,16 +57,13 @@ const register = (firstname, lastname, email, password, res)=>{
         .into('users')
         .then((fii)=>{
             console.log('User created successfully!');
-            res.status('201').send("User created successfully!");
+            res.status('201').json({status: 201, content: "User created successfully!"} );
         })
         .catch((err)=>{
             console.log('Error insertng user : ' + err);
-            res.status('401').send("Error creating user : " +err);
+            res.status('401').json({status: 401, content:"Error creating user : " +err} );
         });
 
-    
-    //signin using user credentials
-    
 }
 
 
