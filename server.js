@@ -79,7 +79,7 @@ const home_check = [
 const answer_check = [
     check('email').isEmail().withMessage("Invalid Email").trim(),
     check('alias').isLength({min:1}).withMessage('Name too short').isLength({max:20}).withMessage('Name too long.').trim(),
-    check('message').isLength({min:1}).withMessage('Name too short').isLength({max:500}).withMessage('Name too long.'),
+    check('message').isLength({min:1}).withMessage('Name too short').isLength({max:500}).withMessage('Name too long.').trim(),
     // check('date').isDate().withMessage('Invalid date'),
 ];
 

@@ -12,22 +12,22 @@ const knex = require('knex')({
 
 const answerHandler = (req, res)=>{
     console.log("Recieved '/answer/' 'post' request at localhost...");
-    console.log(req.params);
+    console.log(req.body);
 
     //get form input params from body
-    let {email, alias, message, date} = req.body;
+    let {email, alias, message, time} = req.body;
 
-    answer( email, alias, message, date, res );
+    answer( email, alias, message, time, res );
 
 }
 
-const answer = ( email, alias, message, date, res )=>{
+const answer = ( email, alias, message, time, res )=>{
     //
     let raw = {
         alias: alias,
         message: message,
-        added: date,
-        email: email,
+        time: time,
+        userid: email,
     };
 
     console.log(raw); //testing

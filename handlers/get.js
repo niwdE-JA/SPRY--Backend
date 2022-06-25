@@ -22,7 +22,7 @@ const getData = (user_id, res )=>{
 
     knex.select()
     .from('comments')
-    .where('email', user_id)
+    .where('userid', user_id)
     .then((output_array)=>{
         if (output_array.length == 0 /*User has no comments*/){           
             console.log("User has no comments");
