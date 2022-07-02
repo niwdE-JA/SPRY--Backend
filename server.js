@@ -2,10 +2,12 @@ const express = require('express') ;
 const bodyParser = require('body-parser') ;
 const {signinHandler} = require('./handlers/signin');
 const {registerHandler} = require('./handlers/register');
-const {getHome, getCoffee } = require('./handlers/get');
+const {getHome, getUser, getCoffee } = require('./handlers/get');
 const {answerHandler} = require('./handlers/answer');
 const {session_secret} = require('./config');
 const {check, validationResult} = require('express-validator');
+const PORT = process.env.PORT || 8080;
+
 
 const knex = require('knex')({
     client: 'pg',
@@ -130,6 +132,13 @@ app.get('/home/:user_id',
     getHome
 );
 
+app.get('/user/:user_id',
+    home_check,
+    isValid,
+    authZero,
+    getUser
+);
+
 
 
 
@@ -152,6 +161,6 @@ app.get('/coffee', (req, res)=>{
 
 
 
-app.listen(8080, ()=>{
+app.listen(PORT, ()=>{
     console.log("I am SPRY Server, listening on port 8080!")
 });

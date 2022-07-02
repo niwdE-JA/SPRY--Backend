@@ -51,15 +51,16 @@ const signin = (email, password, req, res)=>{
     .where('email', email)
     .then((output_array)=>{
         if (output_array.length == 0 || /*User doesn't exist*/
-            password != output_array[0].password/*compare hash*/
+            password != output_array[0].password /*compare hash*/
             ){           
             console.log("Signin failed: Invalid email or password");
             res.status('401').json({status: 401, content: "Signin failed: Invalid email or password"} );
         }else{//success
             console.log("signin success!");
+            console.log(output_array);
             
             createSession( email, req);
-            res.status('201').json({status: 201, content: "signin success!", user: email } );
+            res.status('201').json({status: 201, content: "signin success!", user: email, firstname: output_array[0].firstname, lastname: output_array[0].lastname } );
         }
     })
     .catch((err)=>{
