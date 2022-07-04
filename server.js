@@ -37,7 +37,7 @@ app.use( sessions_config );
 app.use( (req, res, next)=>{
     const allowedOrigins = ['http://spry.unaux.com'];
     const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
+    if (/*allowedOrigins.includes(origin)*/ true) {
         res.setHeader('Access-Control-Allow-Origin', origin);
     }
     // res.setHeader('Access-Control-Allow-Origin', '*' );
@@ -151,7 +151,7 @@ app.get('/brew', getCoffee);
 app.get('/coffee', (req, res)=>{
     //  let {height, width} = req.params;
     console.log("Returning 'coffee' image at '/coffee' ...")
-    res.status('418').sendFile('./coffee.jpg');
+    res.status('418').sendFile(__dirname + './coffee.jpg');
 });
 
 
