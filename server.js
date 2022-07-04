@@ -146,7 +146,7 @@ app.get('/brew', getCoffee);
 app.get('/coffee', (req, res)=>{
     //  let {height, width} = req.params;
     console.log("Returning 'coffee' image at '/coffee' ...")
-    res.status('418').sendFile('C:/Users/USER/Desktop/server/coffee.jpg');
+    res.status('418').sendFile('./coffee.jpg');
 });
 
 
