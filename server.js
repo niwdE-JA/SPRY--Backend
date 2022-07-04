@@ -11,13 +11,7 @@ const PORT = process.env.PORT || 8080;
 
 const knex = require('knex')({
     client: 'pg',
-    connection: {
-        host: '127.0.0.1',
-        database: 'spry',
-        port: 5432,
-        user: 'postgres',
-        password: 'judgementday'
-    }
+    connection: process.env.DATABASE_URL,
 });
 const {v4: uuidv4} = require('uuid');
 const sessions = require('express-session') ;
