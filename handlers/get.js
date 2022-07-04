@@ -1,7 +1,5 @@
-const knex = require('knex')({
-    client: 'pg',
-    connection: process.env.DATABASE_URL,
-});
+const { knex_config} = require('../config');
+const knex = require('knex')( knex_config );
 
 const getHome = (req, res)=>{
     console.log("Recieved '/home/:user_id' 'GET' request at localhost...");

@@ -1,6 +1,6 @@
 const crypto = import('crypto')
    
-const {crypto_secret} = require('../config');
+const {crypto_secret, knex_config} = require('../config');
 
 var createHmac;
 crypto.then( 
@@ -8,10 +8,7 @@ crypto.then(
         createHmac = response.createHmac;
     });
 
-const knex = require('knex')({
-    client: 'pg',
-    connection: process.env.DATABASE_URL,
-});
+const knex = require('knex')( knex_config );
 
 
 const registerHandler = (req, res)=>{

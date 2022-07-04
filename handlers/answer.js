@@ -1,14 +1,5 @@
-const knex = require('knex')({
-    client: 'pg',
-    connection: process.env.DATABASE_URL,
-    // {
-    //     host: '127.0.0.1',
-    //     database: 'spry',
-    //     port: 5432,
-    //     user: 'postgres',
-    //     password: 'judgementday'
-    // }
-});
+const {knex_config} = require('../config');
+const knex = require('knex')( knex_config );
 
 
 const answerHandler = (req, res)=>{

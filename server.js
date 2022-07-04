@@ -4,15 +4,12 @@ const {signinHandler} = require('./handlers/signin');
 const {registerHandler} = require('./handlers/register');
 const {getHome, getUser, getCoffee } = require('./handlers/get');
 const {answerHandler} = require('./handlers/answer');
-const {session_secret} = require('./config');
+const {session_secret, knex_config} = require('./config');
 const {check, validationResult} = require('express-validator');
 const PORT = process.env.PORT || 8080;
 
 
-const knex = require('knex')({
-    client: 'pg',
-    connection: process.env.DATABASE_URL,
-});
+const knex = require('knex')( knex_config );
 const {v4: uuidv4} = require('uuid');
 const sessions = require('express-session') ;
 const KnexSessionStore = require('connect-session-knex')(sessions);
