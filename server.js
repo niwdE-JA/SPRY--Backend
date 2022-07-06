@@ -7,6 +7,7 @@ const {answerHandler} = require('./handlers/answer');
 const {session_secret, knex_config} = require('./config');
 const {check, validationResult} = require('express-validator');
 const PORT = process.env.PORT || 8080;
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
 
 const knex = require('knex')( knex_config );
@@ -24,7 +25,12 @@ const sessions_config =  sessions( {
     secret: session_secret,
     rolling: true,
     saveUninitialized: true/*true*/,
-    cookie:{ maxAge: 24*60*60*1000, httpOnly: false/*true*/,},
+    cookie:{
+        // sameSite: (IS_PRODUCTION) ? 'none' : 'lax', // must be 'none' to enable cross-site delivery
+        // secure: (IS_PRODUCTION),
+        maxAge: 24*60*60*1000,
+        httpOnly: IS_PRODUCTION/*true*/,
+    },
     resave: false,
     store,
 })   
@@ -35,10 +41,11 @@ app.use( bodyParser.json() );
 app.use( sessions_config );
 
 app.use( (req, res, next)=>{
-    const allowedOrigins = ['http://spry.unaux.com'];
+    const allowedOrigins = ['http://spry.unaux.com', 'https://spry-anonymous.herokuapp.com', 'http://localhost:3000'];
     const origin = req.headers.origin;
-    if (/*allowedOrigins.includes(origin)*/ true) {
+    if ( allowedOrigins.includes(origin) ) {
         res.setHeader('Access-Control-Allow-Origin', origin);
+        console.log(origin)
     }
     // res.setHeader('Access-Control-Allow-Origin', '*' );
     res.setHeader('Access-Control-Allow-Credentials', 'true' );
@@ -144,6 +151,8 @@ app.get('/logout', (req, res)=>{
     res.json({content: "Logged out successfully."} );
 });
 
+app.use(express.static('build'));
+
 
 //@temporary-insanity
 app.get('/brew', getCoffee);
@@ -151,12 +160,12 @@ app.get('/brew', getCoffee);
 app.get('/coffee', (req, res)=>{
     //  let {height, width} = req.params;
     console.log("Returning 'coffee' image at '/coffee' ...")
-    res.status('418').sendFile(__dirname + './coffee.jpg');
+    res.status('418').sendFile(__dirname + '/handlers/coffee/coffee.jpg');
 });
 
 
 
 
 app.listen(PORT, ()=>{
-    console.log("I am SPRY Server, listening on port 8080!")
+    console.log(`I am SPRY Server, listening on port ${PORT}!`);
 });

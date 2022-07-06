@@ -75,7 +75,7 @@ const getUserInfo = (user_id, res )=>{
 const getCoffee = (req, res)=>{
     //  let {height, width} = req.params;
     console.log("Received 'GET' request at './brew' route.")
-    res.status('418').sendFile(__dirname + '../coffee.html');
+    res.status('418').sendFile(__dirname + '/coffee/coffee.html');
 }
 
 
