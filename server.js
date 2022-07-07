@@ -41,7 +41,7 @@ app.use( bodyParser.json() );
 app.use( sessions_config );
 
 app.use( (req, res, next)=>{
-    const allowedOrigins = ['http://spry.unaux.com', 'https://spry-anonymous.herokuapp.com', 'http://localhost:3000'];
+    const allowedOrigins = [ 'https://spry-anonymous.herokuapp.com', 'http://localhost:3000' ];
     const origin = req.headers.origin;
     if ( allowedOrigins.includes(origin) ) {
         res.setHeader('Access-Control-Allow-Origin', origin);
