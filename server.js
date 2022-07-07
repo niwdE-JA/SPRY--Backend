@@ -154,6 +154,14 @@ app.get('/logout', (req, res)=>{
 app.use(express.static('build'));
 
 
+// For OGP image:
+app.get('/spry-image', (req, res)=>{
+    //  let {height, width} = req.params;
+    console.log("Returning 'spry' image at '/spry-image' ...")
+    res.status('201').sendFile(__dirname + '/spry.jpg');
+});
+
+
 //@temporary-insanity
 app.get('/brew', getCoffee);
 
