@@ -70,8 +70,8 @@ async function createVerificationLink(email, firstname) {
         await knex.insert({ email, id, epoch_time: new Date().getTime() })
                     .into('urls');
 
-        // sendMail(
-        console.log( 
+        sendMail(
+        // console.log( 
             email, 
             "Verify your SPRY account.", 
 
