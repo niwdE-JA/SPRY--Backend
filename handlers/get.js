@@ -14,7 +14,7 @@ const getData = (user_id, res )=>{
 
     knex.select()
     .from('comments')
-    .where('userid', user_id)
+    .where('email', user_id)
     .then((output_array)=>{
         if (output_array.length == 0 /*User has no comments*/){           
             console.log("User has no comments");
@@ -51,7 +51,8 @@ const getUserInfo = (user_id, res )=>{
     .then((output_array)=>{
         if (output_array.length == 1 /*success*/){           
             console.log("User loaded successfully");
-            res.status('201').json({status: 201, content: "success", firstname: output_array[0].firstname, lastname: output_array[0].lastname, } );
+            console.log(output_array);
+            res.status('201').json({status: 201, content: "success", firstname: output_array[0].firstname, lastname: output_array[0].lastname, verified: output_array[0].verified } );
         }else if(output_array.length > 1){
             console.log("Forbidden");
             // consider unescaping here

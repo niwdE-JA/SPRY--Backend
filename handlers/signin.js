@@ -51,7 +51,7 @@ const signin = (email, password, req, res)=>{
             console.log(output_array);
             
             createSession( email, req);
-            res.status('201').json({status: 201, content: "signin success!", user: email, firstname: output_array[0].firstname, lastname: output_array[0].lastname } );
+            res.status('201').json({status: 201, content: "signin success!", user: email, firstname: output_array[0].firstname, lastname: output_array[0].lastname , verified: output_array[0].verified } );
         }
     })
     .catch((err)=>{

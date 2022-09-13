@@ -41,7 +41,7 @@ app.use( bodyParser.json() );
 app.use( sessions_config );
 
 app.use( (req, res, next)=>{
-    const allowedOrigins = [ 'https://spry-anonymous.herokuapp.com', 'http://localhost:3000' ];
+    const allowedOrigins = [ 'https://spry-anonymous.herokuapp.com','http://spry-anonymous.herokuapp.com', 'http://localhost:3000' ];
     const origin = req.headers.origin ;
     if ( allowedOrigins.includes(origin) ) {
         res.setHeader('Access-Control-Allow-Origin', origin);
@@ -142,6 +142,20 @@ app.get('/user/:user_id',
     getUser
 );
 
+app.get('/verify', async (req, res)=>{
+    let {id, email} = req.query ;
+
+    let unverified = await knex.select().from("urls").where('email', email);//andwhere
+    if (unverified[0].id === id){
+        await knex("users").update({verified: true}).where('email', email);
+        await knex.delete().from("urls").where('email', email);
+        console.log("Verified successfully!");
+        res.json({content: "Verified successfully!"} );
+    }else{
+        console.log("Failed to verify.");
+        res.json({content: "Failed to verify."} );
+    }
+} );
 
 
 
@@ -151,7 +165,7 @@ app.get('/logout', (req, res)=>{
     res.json({content: "Logged out successfully."} );
 });
 
-app.use(express.static('build'));
+app.use('/', express.static('build'));
 
 
 // For OGP image:
@@ -172,7 +186,26 @@ app.get('/coffee', (req, res)=>{
 });
 
 
+let scheduler = async () => {
+    await deleteExpired(24*60*60*1000);
+    
+    setTimeout(
+        scheduler
+    , 8*60*60*1000);
+}
 
+async function deleteExpired(lifespan){
+    //
+    let epoch_time = new Date().getTime() - lifespan ;
+
+    await knex.delete().from('users').where('epoch_time','<', epoch_time )
+                                        .andWhere('verified',false);    
+    await knex.delete().from('urls').where('epoch_time','<', epoch_time );    
+
+    console.log("Clearing expired verification emails...")
+}
+
+scheduler();
 
 app.listen(PORT, ()=>{
     console.log(`I am SPRY Server, listening on port ${PORT}!`);

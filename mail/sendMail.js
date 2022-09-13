@@ -17,15 +17,16 @@ var mailTransport = nodemailer.createTransport({
 
 });
 
-async function sendMail(email, subject, text){
+async function sendMail(email, subject, text, html){
     console.log('Sending to...', email, credentials.user, credentials.password);
 
     try {
         let info = await mailTransport.sendMail({
-                        from : ' "SPRY" <dezwhy97@gmail.com>',
+                        from : ` "SPRY" <${credentials.user}>`,
                         to : email,
                         subject,
                         text,
+                        html,
                     } );
             
         console.log("Message sent: %s", info.messageId);

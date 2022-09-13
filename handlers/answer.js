@@ -19,7 +19,7 @@ const answer = ( email, alias, message, time, res )=>{
         alias: alias,
         message: message,
         time: time,
-        userid: email,
+        email: email,
     };
 
     console.log(raw); //testing
