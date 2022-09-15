@@ -150,10 +150,11 @@ app.get('/verify', async (req, res)=>{
         await knex("users").update({verified: true}).where('email', email);
         await knex.delete().from("urls").where('email', email);
         console.log("Verified successfully!");
-        res.json({content: "Verified successfully!"} );
+        res.status('201').sendFile(__dirname + '/verify_success.html');
+        // res.json({content: "Verified successfully!"} );
     }else{
         console.log("Failed to verify.");
-        res.json({content: "Failed to verify."} );
+        res.json({error:"", content: "Failed to verify."} );
     }
 } );
 
