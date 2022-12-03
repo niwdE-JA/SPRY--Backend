@@ -212,3 +212,5 @@ scheduler();
 app.listen(PORT, ()=>{
     console.log(`I am SPRY Server, listening on port ${PORT}!`);
 });
+
+module.exports = app
