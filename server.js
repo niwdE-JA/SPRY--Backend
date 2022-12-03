@@ -166,7 +166,7 @@ app.get('/logout', (req, res)=>{
     res.json({content: "Logged out successfully."} );
 });
 
-app.use('/', express.static('build'));
+app.use('/', express.static('public'));
 
 
 // For OGP image:
